@@ -1,22 +1,36 @@
-# python3
-
-from collections import namedtuple
-
-AssignedJob = namedtuple("AssignedJob", ["worker", "started_at"])
-
+import heapq            
+class Worker:
+    def __init__(self, worker_index, start_time = 0):
+        self.worker_index = worker_index
+        self.start_time = start_time
+    
+    def __lt__(self, other):
+        if self.start_time == other.start_time:
+            return self.worker_index < other.worker_index
+        return self.start_time < other.start_time
+    
+    def __gt__(self, other):
+        if self.start_time == other.start_time:
+            return self.worker_index > other.worker_index
+        return self.start_time > other.start_time
+    
+    def add_start_time(self, job):
+        self.start_time += job
+        return self    
+    
+    def __repr__(self):
+        return f"{self.worker_index} {self.start_time}"    
 
 def assign_jobs(n_workers, jobs):
-    # TODO: replace this code with a faster algorithm.
-    result = []
-    next_free_time = [0] * n_workers
+    workerQ = [Worker(i) for i in range(n_workers)]
+
     for job in jobs:
-        next_worker = min(range(n_workers), key=lambda w: next_free_time[w])
-        result.append(AssignedJob(next_worker, next_free_time[next_worker]))
-        next_free_time[next_worker] += job
-
-    return result
-
-
+        worker = heapq.heappop(workerQ)
+        print(worker)
+        next = worker.add_start_time(job)
+        heapq.heappush(workerQ, worker)
+        
+        
 def main():
     n_workers, n_jobs = map(int, input().split())
     jobs = list(map(int, input().split()))
@@ -24,9 +38,9 @@ def main():
 
     assigned_jobs = assign_jobs(n_workers, jobs)
 
-    for job in assigned_jobs:
-        print(job.worker, job.started_at)
-
 
 if __name__ == "__main__":
     main()
+        
+    
+     
