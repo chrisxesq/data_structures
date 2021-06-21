@@ -54,24 +54,18 @@ class QueryProcessor:
         else:
             cur_h = self._hash_func(query.s)
             if query.type == 'find':
-                if _check_same_hashed_exist(cur_h) == True:
-                    if query.s in self.elems[cur_h]:
+                if _check_same_hashed_exist(cur_h) == True and query.s in self.elems[cur_h]:
                         print('yes')
-                    else:
-                        print('no')
                 else:
                     print('no')
             elif query.type == 'add':
-                if _check_same_hashed_exist(cur_h) == True:
-                    if query.s in self.elems[cur_h]:
+                if _check_same_hashed_exist(cur_h) == True and query.s in self.elems[cur_h]:
                         pass
-                    else:
-                        self.elems[cur_h].appendleft(query.s)
                 else:
                     self.elems[cur_h].appendleft(query.s)
             elif query.type =='del':
                 if _check_same_hashed_exist(cur_h) == True:
-                    if query.s in query.elems[cur_h]:
+                    if query.s not in self.elems[cur_h]:
                         pass
                     else:
                         if self.elems[cur_h][0]==query.s:
@@ -84,34 +78,6 @@ class QueryProcessor:
                                 if self.elems[cur_h][_]!=query.s:
                                     newque.append(_)
                             self.elems[cur_h] = newque
-                else:
-                    if self.elems[cur_h][0]==query.s:
-                        self.elems[cur_h].popleft()
-                    elif self.elems[cur_h][-1]==query.s:
-                        self.elems[cur_h].pop()
-                    else:
-                        newque = deque()
-                        for _ in self.elems[cur_h]:
-                            if self.elems[cur_h][_]!=query.s:
-                                newque.append(_)
-                        self.elems[cur_h] = newque
-                    
-             #cur_h = _hash_func(query.s)
-            #if _check_same_hashed(cur_h) == 0:
-            #    print('not in db')
-            # try:
-            #     ind = self.elems.index(query.s)
-            # except ValueError:
-            #     ind = -1
-            # if query.type == 'find':
-            #     self.write_search_result(ind != -1)
-            # elif query.type == 'add':
-            #     if ind == -1:
-            #         self.elems.append(query.s)
-            # else:
-            #     if ind != -1:
-            #         self.elems.pop(ind)
-
     def process_queries(self):
         n = int(input())
         for i in range(n):
