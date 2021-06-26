@@ -25,9 +25,6 @@ class QueryProcessor:
         for c in reversed(s):
             ans = (ans * self._multiplier + ord(c)) % self._prime
         return ans % self.bucket_count
- 
-    def write_search_result(self, was_found):
-        print('yes' if was_found else 'no')
 
     def write_chain(self, chain):
         print(' '.join(chain))
@@ -64,20 +61,21 @@ class QueryProcessor:
                 else:
                     self.elems[cur_h].appendleft(query.s)
             elif query.type =='del':
-                if _check_same_hashed_exist(cur_h) == True:
-                    if query.s not in self.elems[cur_h]:
-                        pass
-                    else:
-                        if self.elems[cur_h][0]==query.s:
-                            self.elems[cur_h].popleft()
-                        elif self.elems[cur_h][-1]==query.s:
-                            self.elems[cur_h].pop()
-                        else:
-                            newque = deque()
-                            for _ in self.elems[cur_h]:
-                                if self.elems[cur_h][_]!=query.s:
-                                    newque.append(_)
-                            self.elems[cur_h] = newque
+                if _check_same_hashed_exist(cur_h) == True and query.s in self.elems[cur_h]:
+                    # if self.elems[cur_h][0]==query.s:
+                    #     self.elems[cur_h].popleft()
+                    # elif self.elems[cur_h][-1]==query.s:
+                    #     self.elems[cur_h].pop()
+                    # else:
+                    newque = deque()
+                    for _ in self.elems[cur_h]:
+                        if _ !=query.s:
+                            newque.append(_)
+                    self.elems[cur_h] = newque
+                else:
+                    pass
+            else:
+                pass
     def process_queries(self):
         n = int(input())
         for i in range(n):
