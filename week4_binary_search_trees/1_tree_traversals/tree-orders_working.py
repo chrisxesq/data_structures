@@ -16,26 +16,26 @@ class TreeOrders:
       self.left[i] = b
       self.right[i] = c
 
-  def inOrder(self):
-    self.result = []
-    # Finish the implementation
-    # You may need to add a new recursive method to do that
-                
-    return self.result
+  def inOrder(self,start):
+    if start == -1:
+        return 0
+    self.inOrder(self.left[start])
+    print(self.key[start], end=' ')
+    self.inOrder(self.right[start])
+    
+  def preOrder(self, start):
+    if start == -1:
+        return 0
+    print(self.key[start], end=' ')
+    self.inOrder(self.left[start])
+    self.inOrder(self.right[start])
 
-  def preOrder(self):
-    self.result = []
-    # Finish the implementation
-    # You may need to add a new recursive method to do that
-                
-    return self.result
-
-  def postOrder(self):
-    self.result = []
-    # Finish the implementation
-    # You may need to add a new recursive method to do that
-                
-    return self.result
+  def postOrder(self, start):
+    if start == -1:
+        return 0
+    self.inOrder(self.left[start])
+    self.inOrder(self.right[start])
+    print(self.key[start], end=' ')
 
 def main():
 	tree = TreeOrders()
@@ -45,3 +45,10 @@ def main():
 	print(" ".join(str(x) for x in tree.postOrder()))
 
 threading.Thread(target=main).start()
+
+nodes = 5
+input = [[4,1,2],[2,3,4],[5,-1,-1],[1,-1,-1],[3,-1,-1]]
+result=[]
+prep=[]
+for _ in input:
+    prep.append(_[0])
