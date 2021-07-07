@@ -1,7 +1,8 @@
 import sys, threading
 
-sys.setrecursionlimit(10**7) # max depth of recursion
-threading.stack_size(2**25)
+sys.setrecursionlimit(10**7)
+#below is the KEY to bypass sig 11
+threading.stack_size(2**27)
 
 class Node:
     def __init__(self, a, b, c):
@@ -14,10 +15,8 @@ def isBST(root, min, max):
         return True
     rootNode = nodes[root]
     rootVal =  rootNode.key
-    if rootVal >= min and rootVal < max and \
-    isBST(rootNode.left, min, rootNode.key) and \
-    isBST(rootNode.right, rootNode.key, max):
-        return True
+    if rootVal >= min and rootVal < max:
+      return isBST(rootNode.left, min, rootNode.key) and isBST(rootNode.right, rootNode.key, max)
     else:
         return False
 
@@ -29,14 +28,13 @@ def main():
         return
     nodes = [0 for _ in range(n_nodes)]
     for i in range(n_nodes):
-      a, b, c = map(int, input().split())
-      node = Node(a, b, c)
-      nodes[i] = node
+      a, b, c = map(int, sys.stdin.readline().split())
+      nodes[i] = Node(a, b, c)
     if isBST(0, float('-inf'), float('inf')):
         print('CORRECT')
     else:
         print('INCORRECT')
-    return
+    
 
 threading.Thread(target=main).start()
 
